@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdbool.h>
-#define MAXTOP 4
 #define MAX 1000
 
 int potencia(int base, int exponente);
@@ -10,7 +9,33 @@ int productoSumas(int a, int b);
 int obtenerCifra(int numero, int cifra);
 bool esta(int numero, int arreglo[], int ce);
 void revisarFinDeDatos(bool *seguir);
-void esFeliz(int numero, float *cantFelices);
+void esFeliz(int numero, int *cantFelices, bool *esFeliz);
+void insertarEnOrden(int top[], int *ce, int numero);
+
+//pre {numero > 0}
+void insertarEnOrden(int top[], int *ce, int numero){ // 5 1 2 3   5
+    bool esta=false;
+    int i= *ce;
+    while (i>=0 && !esta){
+        if (top[i]< numero){
+            top[i+1] = top[i];
+            i--;
+        }
+        else{
+            esta = true;
+        }
+        
+    }
+    top[i+1] = numero;
+    *ce = *ce + 1;
+}
+// pre {ce > 0}
+float porcentaje(int cantFelices, int ce){
+    float total=ce;
+    float personasFelices=cantFelices;
+    return(personasFelices/total*100);
+}
+// pos {devuelve el porcentaje de numeros felices}
 
 // pre {cifra <=3}
 int obtenerCifra(int numero, int cifra){
@@ -26,8 +51,9 @@ int obtenerCifra(int numero, int cifra){
     }
     return pos3;
 }
+//pos {devuelve el numero correspondiente a una determinada cifra}
 
-
+// pre {numero > 0}
 bool esta(int numero, int arreglo[], int ce){
     for (int i = 0; i < ce; i++){
        if (arreglo[i] == numero){
@@ -37,12 +63,13 @@ bool esta(int numero, int arreglo[], int ce){
     return false;
     
 }
+// pos {devuelve un booleano que dice si ese numero ya salio en los cuadrados anteriores}
 // pre {numero>=0 y numero<=999}
-void esFeliz(int numero, float *cantFelices){
+void esFeliz(int numero, int *cantFelices, bool *esFeliz){
     int numerosAnteriores[MAX];
     int ce=0;
     int suma=0;
-    while (numero>1 && !esta(numero, numerosAnteriores,ce)){
+    while (numero>=1 && !esta(numero, numerosAnteriores,ce)){
         ce++;
         numerosAnteriores[ce-1] = numero;
         suma = potencia(obtenerCifra(numero,1),2) +  potencia(obtenerCifra(numero,2),2) +  potencia(obtenerCifra(numero,3),2);
@@ -52,8 +79,10 @@ void esFeliz(int numero, float *cantFelices){
     if (numero == 1){
         printf("es feliz\n"); 
         *cantFelices= *cantFelices+1;
+        *esFeliz= true;
     }
     else{
+        *esFeliz=false;
         printf("es infeliz, con el %i se forma el bucle \n", numero);
     }
 }
@@ -63,7 +92,7 @@ void revisarFinDeDatos(bool *seguir){
     char opcion;
     do{
         printf("Desea seguir ingresando datos (S/N) \n");
-        scanf("%c",&opcion);
+        scanf(" %c",&opcion);
     } while (opcion !='S' && opcion!='N');
     if (opcion == 'S'){
         *seguir=true;
