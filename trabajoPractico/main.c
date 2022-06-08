@@ -35,10 +35,7 @@ void main(){
         printf("No se ingresaron numeros\n");
     }
     
-    for (int i = 0; i < ceTop; i++){
-       printf("%i\n", top[i]);
-    }
-    
+   mostrarTop(top,ceTop);
 }
 
 /*cambie de nuevo los contadores a int*/

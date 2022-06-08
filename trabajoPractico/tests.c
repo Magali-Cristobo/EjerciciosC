@@ -42,5 +42,6 @@ int main(){
     assert(feliz == false);
     esFeliz(999,&cantFelices,&feliz);
     assert(feliz == false);
+    printf("pass\n");
     return 0;
 }

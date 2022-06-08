@@ -11,6 +11,12 @@ bool esta(int numero, int arreglo[], int ce);
 void revisarFinDeDatos(bool *seguir);
 void esFeliz(int numero, int *cantFelices, bool *esFeliz);
 void insertarEnOrden(int top[], int *ce, int numero);
+void mostrarTop(int top[], int ceTop);
+float porcentaje(int cantFelices, int ce);
+int obtenerCantCifras(int numero);
+int obtenerCifra(int numero, int cifra);
+void revisarFinDeDatos(bool *seguir);
+int productoSumas(int a, int b);
 
 //pre {numero > 0}
 void insertarEnOrden(int top[], int *ce, int numero){ // 5 1 2 3   5
@@ -29,6 +35,18 @@ void insertarEnOrden(int top[], int *ce, int numero){ // 5 1 2 3   5
     top[i+1] = numero;
     *ce = *ce + 1;
 }
+
+// pre {ceTop>=0}
+void mostrarTop(int top[], int ceTop){
+    if (ceTop!=0){
+        printf("El top es: \n");
+        for (int i = 0; i < ceTop; i++){
+            printf("%i. %i\n", i+1,top[i]);
+        }    
+    }
+}
+// pos {muestra el top de numeros felices}
+
 // pre {ce > 0}
 float porcentaje(int cantFelices, int ce){
     float total=ce;
@@ -37,19 +55,27 @@ float porcentaje(int cantFelices, int ce){
 }
 // pos {devuelve el porcentaje de numeros felices}
 
+// pre {numero>0 y numero<999}
+int obtenerCantCifras(int numero){
+    int cantCifras=0;
+    while (numero!=0){
+        numero = numero/10;
+        cantCifras++;
+    }
+    return cantCifras;
+}
+// pos {retorna la cantidad de cifras de un numero}
+
 // pre {cifra <=3}
-int obtenerCifra(int numero, int cifra){
-    int pos1, pos2, pos3;
-    pos1= numero/100;
-    pos2 = (numero%100)/10;
-    pos3 = (numero%100)% 10;
-    if (cifra == 1){
-        return pos1;
+int obtenerCifra(int numero, int cifra){ 
+    int resto=0;
+    while (cifra!=0){
+        resto= numero % 10;
+        numero = numero/10;
+        cifra--;
     }
-    else if (cifra == 2){
-        return pos2;
-    }
-    return pos3;
+    return resto;
+    
 }
 //pos {devuelve el numero correspondiente a una determinada cifra}
 
@@ -64,17 +90,34 @@ bool esta(int numero, int arreglo[], int ce){
     
 }
 // pos {devuelve un booleano que dice si ese numero ya salio en los cuadrados anteriores}
+
 // pre {numero>=0 y numero<=999}
 void esFeliz(int numero, int *cantFelices, bool *esFeliz){
     int numerosAnteriores[MAX];
     int ce=0;
     int suma=0;
-    while (numero>=1 && !esta(numero, numerosAnteriores,ce)){
+    int cantCifras= obtenerCantCifras(numero);
+    int cifraActual;
+    if (numero==1){
+        printf("1 ^2 = 1\n");
+    }
+    while (numero>1 && !esta(numero, numerosAnteriores,ce)){
+        suma=0;
         ce++;
         numerosAnteriores[ce-1] = numero;
-        suma = potencia(obtenerCifra(numero,1),2) +  potencia(obtenerCifra(numero,2),2) +  potencia(obtenerCifra(numero,3),2);
-        printf("%i ^2 + %i ^2 + %i ^2 = %i\n",obtenerCifra(numero,1), obtenerCifra(numero,2), obtenerCifra(numero,3), suma);
+        for (int i = cantCifras; i > 0; i--){ //porque sino muestra los numeros al reves
+          cifraActual=obtenerCifra(numero,i);
+          suma+= potencia(cifraActual,2);
+          if (i==1){
+            printf("%i ^2 ", cifraActual);
+          }
+          else{
+            printf("%i ^2 + ", cifraActual);
+          }
+        }
+        printf(" = %i\n", suma);
         numero = suma;
+        cantCifras=obtenerCantCifras(numero);
     }
     if (numero == 1){
         printf("es feliz\n"); 
@@ -86,8 +129,9 @@ void esFeliz(int numero, int *cantFelices, bool *esFeliz){
         printf("es infeliz, con el %i se forma el bucle \n", numero);
     }
 }
-//pos {indica si el numero es feliz o no}
+//pos {muestra todo el desarrollo, indica si el numero es feliz o no y setea la cantidad de felices}
 
+//pre {}
 void revisarFinDeDatos(bool *seguir){
     char opcion;
     do{
@@ -101,7 +145,9 @@ void revisarFinDeDatos(bool *seguir){
         *seguir=false;
     }
 }
-//pos{determina si se desean ingresar mas datos o}
+//pos{determina si se desean ingresar mas datos o no}
+
+// pre {}
 bool numeroValido(int numero){
     if (numero>0 && numero<=999){
         return true;
@@ -110,6 +156,7 @@ bool numeroValido(int numero){
     
 }
 //pos{devuelve si el numero es valido o no}
+
 // pre {a>=0 y b>=0}
 int productoSumas(int a, int b){
     int producto=0;
@@ -121,8 +168,9 @@ int productoSumas(int a, int b){
     
 }
 // pos{devuelve el producto entre 2 numeros a partir de sumas sucesivas}
+
 //pre {base >= 0 y exponente >=0}
-int potencia(int base, int exponente){ //podemos poner directamente 2???
+int potencia(int base, int exponente){
     int resultado=1;
     while (exponente>0){
         resultado =  productoSumas(resultado, base);
@@ -133,14 +181,11 @@ int potencia(int base, int exponente){ //podemos poner directamente 2???
 } //2^3 = 2 * 1 / 2 * 2 / 4 * 2 
 //pos{devuelve la potencia a partir de sumas sucesivas}
 
+// pre {}
 void obtenerNumero(int *numero){
     do{
         printf("Ingrese un numero positivo y de max 3 cifras\n");
         scanf("%i",numero);
-    } while (!numeroValido(*numero));// numeroValido(*numero) == false
+    } while (!numeroValido(*numero)); // numeroValido(*numero) == false
 }
-// pos { valida el numero }
-
-//tests?
-// de cuanto es el arreglo?
-// hay problema si mostramos la cifra con 0?
+// pos {valida el numero para que sea positivo y de max 3 cifras}
