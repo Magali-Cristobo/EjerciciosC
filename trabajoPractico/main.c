@@ -28,7 +28,7 @@ void main(){
         revisarFinDeDatos(&seguir);
     }
     if (cn>0){
-       printf("el porcentaje es: %.1f ",porcentaje(cantFelices, cn));
+       printf("el porcentaje de numeros felices es: %.1f ",porcentaje(cantFelices, cn));
        printf("%c \n", '%');
     }
     else{
@@ -37,5 +37,3 @@ void main(){
     
    mostrarTop(top,ceTop);
 }
-
-/*cambie de nuevo los contadores a int*/

@@ -19,11 +19,11 @@ void revisarFinDeDatos(bool *seguir);
 int productoSumas(int a, int b);
 
 //pre {numero > 0}
-void insertarEnOrden(int top[], int *ce, int numero){ // 5 1 2 3   5
+void insertarEnOrden(int top[], int *ce, int numero){ // va insertando de forma descendente los numeros
     bool esta=false;
     int i= *ce;
     while (i>=0 && !esta){
-        if (top[i]< numero){
+        if (top[i]< numero){ // si el numero es del top es menor entonces lo mueve una posicion a la derecha
             top[i+1] = top[i];
             i--;
         }
@@ -35,6 +35,7 @@ void insertarEnOrden(int top[], int *ce, int numero){ // 5 1 2 3   5
     top[i+1] = numero;
     *ce = *ce + 1;
 }
+//pos {inserta numero en top de forma descendente}
 
 // pre {ceTop>=0}
 void mostrarTop(int top[], int ceTop){
@@ -66,7 +67,7 @@ int obtenerCantCifras(int numero){
 }
 // pos {retorna la cantidad de cifras de un numero}
 
-// pre {cifra <=3}
+// pre {cifra >=0 y cifra <=3}
 int obtenerCifra(int numero, int cifra){ 
     int resto=0;
     while (cifra!=0){
@@ -79,7 +80,7 @@ int obtenerCifra(int numero, int cifra){
 }
 //pos {devuelve el numero correspondiente a una determinada cifra}
 
-// pre {numero > 0}
+// pre {}
 bool esta(int numero, int arreglo[], int ce){
     for (int i = 0; i < ce; i++){
        if (arreglo[i] == numero){
